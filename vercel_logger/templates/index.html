@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sincronización de Seguridad | al3xg0nzalezzz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d2ff;
+            --accent: #3a7bd5;
+            --bg: #05070a;
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --border: rgba(255, 255, 255, 0.07);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(0, 210, 255, 0.08) 0%, transparent 35%),
+                radial-gradient(circle at 90% 90%, rgba(58, 123, 213, 0.08) 0%, transparent 35%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border);
+            padding: 60px 40px;
+            border-radius: 32px;
+            text-align: center;
+            width: 420px;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: 0.5s;
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            to { left: 100%; }
+        }
+
+        .loader-ring {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 35px;
+        }
+
+        .loader-ring div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            margin: 10px;
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: ring 1.5s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: var(--primary) transparent transparent transparent;
+        }
+        .loader-ring div:nth-child(1) { animation-delay: -0.45s; }
+        .loader-ring div:nth-child(2) { animation-delay: -0.3s; }
+        .loader-ring div:nth-child(3) { animation-delay: -0.15s; }
+
+        @keyframes ring {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .avatar-mini {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
+            object-fit: cover;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .status-txt {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--primary);
+            background: rgba(0, 210, 255, 0.05);
+            padding: 8px 15px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 25px;
+            border: 1px solid rgba(0, 210, 255, 0.1);
+        }
+
+        p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 280px;
+            margin: 0 auto 30px;
+        }
+
+        .footer-brand {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #334155;
+            margin-top: 20px;
+        }
+
+        /* Ambient Orbs */
+        .orb {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            filter: blur(150px);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+    </style>
+</head>
+<body>
+    <div class="orb" style="top: -100px; left: -100px;"></div>
+    <div class="orb" style="bottom: -100px; right: -100px; background: var(--primary);"></div>
+
+    <div class="container">
+        <div class="glass-card">
+            <div class="loader-ring">
+                <div></div><div></div><div></div><div></div>
+                <img src="https://i.pinimg.com/736x/10/e3/f5/10e3f51d11ef13d5c88cb329211146ba.jpg" class="avatar-mini">
+            </div>
+
+            <div class="status-txt">> SYNCING_ENCRYPTED_NODE</div>
+            
+            <h1>Verificando Protocolo</h1>
+            <p>Estableciendo conexión segura con la red cifrada. Por favor, no cierre esta ventana.</p>
+
+            <div class="footer-brand">al3xg0nzalezzz</div>
+        </div>
+    </div>
+
+    <script>
+        // Redirección profesional a los 5 segundos
+        setTimeout(() => {
+            window.location.href = "https://www.google.com";
+        }, 5000);
+    </script>
+</body>
+</html>
